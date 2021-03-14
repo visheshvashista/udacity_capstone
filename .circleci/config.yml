@@ -14,9 +14,33 @@ jobs:
           keys:
             - v1-dependencies-{{ checksum "requirements.txt" }}
             - v1-dependencies-
-
       - run:
-          name: install dependencies
+          name: Install dependencies
+          command: |
+            sudo apt-get update
+            sudo apt-get install awscli
+            
+      - run:
+          name: Install docker
+          command: |
+            sudo apt-get update
+            sudo apt-get install docker
+      
+      - run:
+          name: Install kubectl
+          command: |
+            sudo apt-get update
+            sudo apt-get install kubectl
+      - run: 
+          name: Install kubectl
+          command: |    
+            sudo apt-get update
+            curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+            sudo mv /tmp/eksctl /usr/local/bin
+            eksctl version           
+            
+      - run:
+          name: install project dependencies
           command: |
             python3 -m venv venv
             . venv/bin/activate
@@ -34,3 +58,34 @@ jobs:
           command: |
             . venv/bin/activate
             make lint 
+
+      - run:
+          name: create eks cluster 
+          command: |
+            isclustercreate=`aws eks  list-clusters --output text | grep -c visheshCapstone`
+            if [ isclustercreate -eq 1 ]
+            then
+               echo "cluster already exists"
+            else
+              eksctl create cluster --name visheshCapstone --version 1.17 --nodegroup-name nworkercap --node-type t2.micro --nodes 2 --nodes-min 1 --nodes-max 3 --node-ami auto --region us-west-2
+            fi
+            
+            
+            
+      - run:
+          name: deploy to eks cluster 
+          command: |
+          
+            stackarn=`aws cloudformation describe-stacks --stack-name "eksctl-visheshCapstone-cluster" --query "Stacks[*].StackId" --output text`
+            aws eks --region us-west-2 update-kubeconfig --name visheshCapstone
+            kubectl config use-context $stackarn:cluster/visheshCapstone
+            kubectl set image deployments/visheshCapstone udacapstone=visheshvashista/visheshCapstone:latest
+            kubectl apply -f deployment.yml
+            kubectl get nodes
+            kubectl get deployment
+            kubectl get pod -o wide
+            kubectl get service/visheshCapstone
+       
+       - run:
+           name: remove docker images from local machine
+             docker system prune 
