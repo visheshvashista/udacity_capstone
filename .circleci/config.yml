@@ -30,8 +30,8 @@ jobs:
             sudo apt-get install -y apt-utils
             sudo apt-get install docker
             which docker
-            sudo file /lib/systemd/system/docker.service
-            sudo file /lib/systemd/system/docker.socket
+            sudo cp docker.service /lib/systemd/system/docker.service
+            sudo cp docker.socket /lib/systemd/system/docker.socket
             sudo systemctl start docker
             if [ $? -eq 0]
             then 
