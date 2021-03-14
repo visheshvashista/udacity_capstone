@@ -23,15 +23,14 @@ jobs:
       - run:
           name: Install systemd
           command: |
-            docker images
+            
             sudo apt-get update
             sudo apt-get install -y apt-utils
             sudo apt-get install systemd
             sudo service dbus start
-            sudo cp docker.service /lib/systemd/system/docker.service
-            sudo cp docker.socket /lib/systemd/system/docker.socket
-            cat /lib/systemd/system/docker.service
-            
+            sudo dockerd
+            docker images
+
       - run:
           name: Install kubectl
           command: |
