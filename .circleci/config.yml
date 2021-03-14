@@ -71,8 +71,8 @@ jobs:
             ls -lrt
             python3 -m venv venv
             . venv/bin/activate
-            
-            isclustercreate=`aws eks  list-clusters --output text | grep -c visheshCapstone`
+            aws help
+            isclustercreate=$(aws eks  list-clusters --output text | grep -c visheshCapstone)
             if [ isclustercreate -eq 1 ]
             then
                echo "cluster already exists"
