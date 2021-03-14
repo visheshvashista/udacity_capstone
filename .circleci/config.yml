@@ -34,6 +34,7 @@ jobs:
             sudo cp docker.service /lib/systemd/system/docker.service
             sudo cp docker.socket /lib/systemd/system/docker.socket
             sudo systemctl daemon-reload
+            ps -axf | grep docker | grep -v grep
             sudo systemctl start docker
             if [ $? -eq 0]
             then 
