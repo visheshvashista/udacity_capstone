@@ -29,6 +29,8 @@ jobs:
             sudo service dbus start
             sudo apt-get install -y apt-utils
             sudo apt-get install docker
+            sudo file /lib/systemd/system/docker.service
+            sudo file /lib/systemd/system/docker.socket
             sudo systemctl start docker
             if [ $? -eq 0]
             then 
