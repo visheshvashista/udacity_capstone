@@ -19,12 +19,7 @@ jobs:
           command: |
             sudo apt-get update
             sudo apt-get install awscli
-            
-      - run:
-          name: Install docker
-          command: |
-            which docker
-      
+                 
       - run:
           name: Install kubectl
           command: |
@@ -59,11 +54,22 @@ jobs:
             . venv/bin/activate
             make lint 
     
-  createcluster:
-    docker:
-      - image: python:3.7.3-stretch
-    working_directory: ~/repo
-    steps:
+      - run:
+          name: start docker
+          command: |
+            sudo systemctl start docker
+            
+      - run:
+          name: create docker image
+          command: |
+            ./run_docker.sh
+            ./make_predictions.sh
+            
+      - run:
+          name: publish docker image
+          command: |
+            ./upload_docker.sh
+                    
       - run:
           name: create eks cluster 
           command: |
@@ -76,12 +82,7 @@ jobs:
             else
               eksctl create cluster --name visheshCapstone --version 1.17 --nodegroup-name nworkercap --node-type t2.micro --nodes 2 --nodes-min 1 --nodes-max 3 --node-ami auto --region us-west-2
             fi
- 
-  deploytocluster:
-    docker:
-      - image: python:3.7.3-stretch
-    working_directory: ~/repo
-    steps:            
+            
       - run:
           name: deploy to eks cluster 
           command: |
