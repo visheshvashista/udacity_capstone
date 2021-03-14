@@ -6,7 +6,7 @@ version: 2.1
 jobs:
   buildndeploy:
     docker:
-      - image: circleci/node
+      - image: ubuntu:latest
     working_directory: ~/repo
     steps:
       - checkout
