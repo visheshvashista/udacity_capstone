@@ -30,16 +30,12 @@ jobs:
             sudo service dbus start
             sudo apt-get install docker
             sudo apt-get update
+            sudo systemctl daemon-reload
             which docker
             sudo cp docker.service /lib/systemd/system/docker.service
             sudo cp docker.socket /lib/systemd/system/docker.socket
-            sudo systemctl daemon-reload
-            ps -axf | grep docker | grep -v grep
-            sudo systemctl start docker
-            if [ $? -eq 0]
-            then 
-              systemctl status docker.service
-            fi
+            sudo systemctl start /lib/systemd/system/docker.service
+            sudo systemctl start /lib/systemd/system/docker.socket
             docker images
       
       - run:
