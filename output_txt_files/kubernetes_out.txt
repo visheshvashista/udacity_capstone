@@ -1,0 +1,7 @@
+vishesh@LAPTOP-9P49F2EN:~$ kubectl get pods
+NAME                                     READY   STATUS    RESTARTS   AGE
+udacitymicroservices8-74779b96c9-l4v29   1/1     Running   2          47h
+vishesh@LAPTOP-9P49F2EN:~$ ./make_predictions.sh
+Port: 80
+{"prediction":[20.35373177134412]}
+vishesh@LAPTOP-9P49F2EN:~$
