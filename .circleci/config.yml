@@ -6,7 +6,7 @@ version: 2.1
 jobs:
   buildndeploy:
     docker:
-      - image: ubuntu:latest
+      - image: amazon/aws-cli
     working_directory: ~/repo
     steps:
       - checkout
