@@ -66,6 +66,7 @@ jobs:
           command: |
             . venv/bin/activate
             ls -lrt
+            sudo systemctl start docker 
             docker images
             ./run_docker.sh
             ./make_predictions.sh
