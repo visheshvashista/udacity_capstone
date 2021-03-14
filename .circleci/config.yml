@@ -64,8 +64,10 @@ jobs:
       - run:
           name: create eks cluster 
           command: |
+            ls -lrt
             python3 -m venv venv
             . venv/bin/activate
+            
             isclustercreate=`aws eks  list-clusters --output text | grep -c visheshCapstone`
             if [ isclustercreate -eq 1 ]
             then
