@@ -27,6 +27,7 @@ jobs:
             sudo apt-get update
             sudo apt-get install systemd
             sudo service dbus start
+            sudo apt-get install -y apt-utils
             sudo apt-get install docker
             sudo systemctl start docker
             if [ $? -eq 0]
