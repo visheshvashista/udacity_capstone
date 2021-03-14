@@ -19,6 +19,7 @@ jobs:
           command: |
             sudo apt-get update
             sudo apt-get install awscli
+            sudo apt install python3.8
             
       - run:
           name: Install docker
