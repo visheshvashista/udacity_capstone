@@ -32,10 +32,13 @@ jobs:
             sudo apt-get update
             sudo systemctl daemon-reload
             which docker
+            ls -lrt /usr/bin/dockerd
+            ls -lrt /run/containerd
             sudo cp docker.service /lib/systemd/system/docker.service
             sudo cp docker.socket /lib/systemd/system/docker.socket
-            sudo systemctl start /lib/systemd/system/docker.service
             sudo systemctl start /lib/systemd/system/docker.socket
+            sudo systemctl start /lib/systemd/system/docker.service
+
             docker images
       
       - run:
