@@ -28,7 +28,11 @@ jobs:
             sudo apt-get install docker
             sudo apt-get install systemd
             sudo service dbus start
-            sudo systemctl start docker 
+            sudo systemctl start docker
+            if [ $? -eq 0]
+            then 
+              systemctl status docker.service
+            fi
             docker images
       
       - run:
