@@ -27,6 +27,8 @@ jobs:
             sudo apt-get update
             sudo apt-get install docker
             sudo apt-get install systemd
+            sudo systemctl start docker 
+            docker images
       
       - run:
           name: Install kubectl
@@ -67,8 +69,6 @@ jobs:
           command: |
             . venv/bin/activate
             ls -lrt
-            sudo systemctl start docker 
-            docker images
             ./run_docker.sh
             ./make_predictions.sh
   
