@@ -60,6 +60,23 @@ jobs:
           command: |
             . venv/bin/activate
             make lint 
+            
+      - run:
+          name: build docker image
+          command: |
+            . venv/bin/activate
+            ls -lrt
+            docker images
+            ./run_docker.sh
+            ./make_predictions.sh
+  
+      - run:
+          name: push docker image
+          command: |
+            . venv/bin/activate
+            ls -lrt
+            docker images
+            ./uplaod_docker.sh
 
       - run:
           name: create eks cluster 
