@@ -23,9 +23,6 @@ jobs:
             yum update
             yum install python3-venv
             python --version
-            python3 -m venv venv
-            . venv/bin/activate
-
             
       - run:
           name: Install docker
