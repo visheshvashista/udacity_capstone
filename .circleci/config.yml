@@ -25,9 +25,9 @@ jobs:
           name: Install docker
           command: |
             sudo apt-get update
-            sudo apt-get install docker
             sudo apt-get install systemd
             sudo service dbus start
+            sudo apt-get install docker
             sudo systemctl start docker
             if [ $? -eq 0]
             then 
