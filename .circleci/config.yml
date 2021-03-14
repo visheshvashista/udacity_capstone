@@ -27,6 +27,7 @@ jobs:
             sudo apt-get update
             sudo apt-get install docker
             sudo apt-get install systemd
+            sudo service dbus start
             sudo systemctl start docker 
             docker images
       
