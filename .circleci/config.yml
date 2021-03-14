@@ -6,7 +6,7 @@ version: 2.1
 jobs:
   buildndeploy:
     docker:
-      - image: amazon/aws-cli
+      - image: circleci/node:13.8.0
     working_directory: ~/repo
     steps:
       - checkout
@@ -15,26 +15,21 @@ jobs:
             - v1-dependencies-{{ checksum "requirements.txt" }}
             - v1-dependencies-
       - run:
-          uname -a
-          
-      - run:
           name: Install dependencies
           command: |
-            yum update
-            yum install python3-venv
-            python --version
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
             
       - run:
           name: Install docker
           command: |
-            . venv/bin/activate
             sudo apt-get update
             sudo apt-get install docker
       
       - run:
           name: Install kubectl
           command: |
-            . venv/bin/activate
             sudo apt-get update && sudo apt-get install -y apt-transport-https gnupg2 curl
             curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
             echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
@@ -43,8 +38,7 @@ jobs:
 
       - run: 
           name: Install eksctl
-          command: |
-            . venv/bin/activate
+          command: |    
             sudo apt-get update
             curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
             sudo mv /tmp/eksctl /usr/local/bin
@@ -53,26 +47,41 @@ jobs:
       - run:
           name: install project dependencies
           command: |
+            sudo apt-get update
+            sudo apt-get install python3-venv
+            python3 -m venv venv
             . venv/bin/activate
             make install
             sudo wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
             sudo chmod +x /bin/hadolint
-  
+      
+      - save_cache:
+          key: v1-dependencies-{{ checksum "requirements.txt" }}
+          paths:
+            - ./venv
+            
+  runlint:
+    docker:
+      - image: circleci/node:13.8.0
+    working_directory: ~/repo
+    steps:
+      - checkout 
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "requirements.txt" }}
+            - v1-dependencies-      
       - run:
           name: run lint
           command: |
             . venv/bin/activate
-            make lint
-            aws --version
+            make lint 
 
       - run:
           name: create eks cluster 
           command: |
-            ls -lrt
             python3 -m venv venv
             . venv/bin/activate
-            aws help
-            isclustercreate=$(aws eks  list-clusters --output text | grep -c visheshCapstone)
+            isclustercreate=`aws eks  list-clusters --output text | grep -c visheshCapstone`
             if [ isclustercreate -eq 1 ]
             then
                echo "cluster already exists"
