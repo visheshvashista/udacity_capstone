@@ -25,10 +25,6 @@ jobs:
           command: |
             
             sudo apt-get update
-            sudo apt-get install -y apt-utils
-            sudo apt-get install systemd
-            sudo service dbus start
-            sudo dockerd
             docker images
 
       - run:
