@@ -6,7 +6,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: circleci/node
+      - image: circleci/python:3.6.7-stretch
     working_directory: ~/repo
     steps:
       - checkout
@@ -64,6 +64,11 @@ jobs:
           command: |
             . venv/bin/activate
             make lint 
+            
+       - run:
+          name: check docker is running or not
+          command: |
+            docker images
     
       - run:
           name: start docker
@@ -80,7 +85,13 @@ jobs:
           name: publish docker image
           command: |
             ./upload_docker.sh
-                    
+ jobs:
+  deploy:
+    docker:
+      - image: circleci/python:3.6.7-stretch
+    working_directory: ~/repo
+    steps:
+      -checkout 
       - run:
           name: create eks cluster 
           command: |
