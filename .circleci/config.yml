@@ -70,11 +70,6 @@ jobs:
           name: check docker is running or not
           command: |
             docker images
-    
-      - run:
-          name: start docker
-          command: |
-            sudo systemctl start docker
             
       - run:
           name: create docker image
