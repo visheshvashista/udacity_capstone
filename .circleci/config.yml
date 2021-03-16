@@ -23,12 +23,13 @@ jobs:
           command: |
             sudo apt-get update
             sudo apt-get install awscli
-                 
+      
+      - setup_remote_docker:
+          version: 19.03.13     
+      
       - run:
-          name: Install systemd
+          name: check if docker is running
           command: |
-            
-            sudo apt-get update
             docker images
 
       - run:
