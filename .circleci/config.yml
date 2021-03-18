@@ -3,9 +3,6 @@
 # Check https://circleci.com/docs/2.0/language-python/ for more details
 #
 version: 2.1
-orbs:
-  aws-eks: circleci/aws-eks@1.0.3
-  kubernetes: circleci/kubernetes@0.11.2
 
 jobs:
   build:
@@ -20,11 +17,27 @@ jobs:
             - v1-dependencies-
 
       - run:
-          name: Install dependencies
+          name: Install awscli
           command: |
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
             sudo ./aws/install
+      - run:
+          name: Install kubectl
+          command: |
+            sudo apt-get update && sudo apt-get install -y apt-transport-https gnupg2 curl
+            curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+            echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
+            sudo apt-get update
+            sudo apt-get install -y kubectl
+
+      - run: 
+          name: Install eksctl
+          command: |    
+            sudo apt-get update
+            curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+            sudo mv /tmp/eksctl /usr/local/bin
+            eksctl version           
       
       - setup_remote_docker:
           version: 19.03.13        
