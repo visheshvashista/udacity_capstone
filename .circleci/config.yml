@@ -18,11 +18,13 @@ jobs:
           keys:
             - v1-dependencies-{{ checksum "requirements.txt" }}
             - v1-dependencies-
+
       - run:
           name: Install dependencies
           command: |
-            sudo apt-get update
-            sudo apt-get install awscli
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
       
       - setup_remote_docker:
           version: 19.03.13        
@@ -62,8 +64,8 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            isclustercreate=`aws eks  list-clusters --output text | grep -c visheshCapstone`
-            if [ isclustercreate -eq 1 ]
+            isclustercreated=`aws eks  list-clusters --output text | grep -c visheshCapstone`
+            if [ isclustercreated -eq 1 ]
             then
                echo "cluster already exists"
             else
