@@ -61,7 +61,7 @@ jobs:
       - run:
           name: run Predictions
           command: |
-            docker run -p 8080:80 app.py &
+            docker run -p 0.0.0.0:8080:80 app.py &
             ps -eaf
             ./make_prediction.sh
  
