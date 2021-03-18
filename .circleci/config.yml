@@ -62,7 +62,7 @@ jobs:
           name: run Predictions
           command: |
             docker pull visheshvashista/visheshcapstone
-            docker run -p 8080:80 visheshvashista/visheshcapstone &
+            docker run -p 192.168.1.100:8080:80 visheshvashista/visheshcapstone &
             ps -eaf
  
        
