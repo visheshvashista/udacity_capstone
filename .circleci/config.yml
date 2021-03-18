@@ -62,6 +62,7 @@ jobs:
           name: run Predictions
           command: |
             docker ps -a
+            ps -eaf
             ./make_prediction.sh
  
        
