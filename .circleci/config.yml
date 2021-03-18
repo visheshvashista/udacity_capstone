@@ -71,6 +71,13 @@ jobs:
           command: |
             echo $DockerPassword | docker login --username visheshvashista --password-stdin
             ./upload_docker.sh
+
+      - run:
+          name: create eks cluster 
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            aws eks  list-clusters --output text | grep -c visheshCapstone    
        
       - run:
           name: create eks cluster 
