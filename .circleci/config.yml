@@ -54,15 +54,34 @@ jobs:
       - run:
           name: publish docker image
           command: |
-            echo 61b14e81-c8c8-4b9f-b278-e5a09f2bbe6b | docker login --username visheshvashista --password-stdin
+            echo $DockerPassword | docker login --username visheshvashista --password-stdin
             ./upload_docker.sh
+       
       - run:
-          name: run Predictions
+          name: create eks cluster 
           command: |
-            docker pull visheshvashista/visheshcapstone
-            docker run -p 8080:80 visheshvashista/visheshcapstone &
-            ps -eaf
- 
+            python3 -m venv venv
+            . venv/bin/activate
+            isclustercreate=`aws eks  list-clusters --output text | grep -c visheshCapstone`
+            if [ isclustercreate -eq 1 ]
+            then
+               echo "cluster already exists"
+            else
+              eksctl create cluster --name visheshCapstone --version 1.17 --nodegroup-name nworkercap --node-type t2.micro --nodes 2 --nodes-min 1 --nodes-max 3 --node-ami auto --region us-west-2
+            fi
+         
+      - run:
+          name: deploy to eks cluster 
+          command: |
+            stackarn=`aws cloudformation describe-stacks --stack-name "eksctl-visheshCapstone-cluster" --query "Stacks[*].StackId" --output text`
+            aws eks --region us-west-2 update-kubeconfig --name visheshCapstone
+            kubectl config use-context $stackarn:cluster/visheshCapstone
+            kubectl set image deployments/visheshCapstone udacapstone=visheshvashista/visheshCapstone:latest
+            kubectl apply -f deployment.yml
+            kubectl get nodes
+            kubectl get deployment
+            kubectl get pod -o wide
+            kubectl get service/visheshCapstone
        
 workflows:
   default:
