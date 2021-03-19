@@ -1,15 +1,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: visheshCapstone
+  name: visheshcapstone
   labels:
-    app: visheshCapstone
+    app: visheshcapstone
   namespace: default
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: visheshCapstone
+      app: visheshcapstone
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -18,12 +18,12 @@ spec:
   template:
     metadata:
       labels:
-        app: visheshCapstone
+        app: visheshcapstone
     spec:
       containers:
-        - image: visheshvashista/visheshCapstone
+        - image: visheshvashista/visheshcapstone
           imagePullPolicy: Always
-          name: visheshCapstone
+          name: visheshcapstone
           ports:
             - containerPort: 80
 
@@ -31,13 +31,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: visheshCapstone
+  name: visheshcapstone
   labels:
-    app: visheshCapstone
+    app: visheshcapstone
 spec:
   type: LoadBalancer
   selector:
-    app: visheshCapstone
+    app: visheshcapstone
   ports:
     - port: 80
       targetPort: 80
