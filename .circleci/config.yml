@@ -70,21 +70,14 @@ jobs:
           name: publish docker image
           command: |
             echo $DockerPassword | docker login --username visheshvashista --password-stdin
-            ./upload_docker.sh
-
-      - run:
-          name: create eks cluster 
-          command: |
-            python3 -m venv venv
-            . venv/bin/activate
-            aws eks  list-clusters --output text | grep -c visheshCapstone    
+            ./upload_docker.sh  
        
       - run:
           name: create eks cluster 
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            isclustercreated=`aws eks  list-clusters --output text | grep -c visheshCapstone`
+            isclustercreated=$(aws eks  list-clusters --output text | grep -c visheshCapstone)
             echo "isClustered = $isclustercreated"
             if [ $isclustercreated -eq 1 ]
             then
