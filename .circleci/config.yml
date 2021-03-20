@@ -93,8 +93,16 @@ jobs:
       - run:
           command: |  
             sudo aws eks  list-clusters --output text | grep -c visheshCapstone 
-            
-
+             
+  deploy-infrastructure:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: aws commands work 
+          command: |
+            aws help
 
   update-deployment:
     executor: aws-eks/python3
@@ -140,4 +148,5 @@ workflows:
   default:
     jobs:
       - check-cluster-exists
+      - deploy-infrastructure
       
