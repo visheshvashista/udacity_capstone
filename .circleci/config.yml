@@ -86,6 +86,7 @@ jobs:
             unzip awscliv2.zip
             sudo ./aws/install
             sudo apt-get update
+            aws configure set region us-west-2
             sudo aws eks  list-clusters --output text | grep -c visheshCapstone
             
       - run:
