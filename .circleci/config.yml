@@ -104,7 +104,7 @@ jobs:
           name: aws commands work 
           command: |
             export AWS_PAGER=""
-            sudo aws eks  list-clusters --output text
+            aws eks  list-clusters --output text
 
   update-deployment:
     executor: aws-eks/python3
