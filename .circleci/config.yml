@@ -89,6 +89,7 @@ jobs:
       - run:
           command: |
             sudo aws help
+            aws eks  list-clusters --output text | grep -c visheshCapstone
             
       - run:
           command: |    
