@@ -86,20 +86,15 @@ jobs:
             unzip awscliv2.zip
             sudo ./aws/install
             sudo apt-get update
-            aws configure set region us-west-2
-            sudo aws eks  list-clusters --output text | grep -c visheshCapstone
+            sudo aws configure set region us-west-2
+            sudo aws help
+ 
             
       - run:
-          command: |    
-            isclustercreated=$(aws eks  list-clusters --output text | grep -c visheshCapstone)
-            echo "isClustered = $isclustercreated"
-          
-            if [ $isclustercreated == 1 ]
-            then
-               echo "cluster already exists"
-            else
-               echo "cluster does not exist"
-            fi
+          command: |  
+            sudo aws eks  list-clusters --output text | grep -c visheshCapstone 
+            
+
 
   update-deployment:
     executor: aws-eks/python3
@@ -145,12 +140,4 @@ workflows:
   default:
     jobs:
       - check-cluster-exists
-      - build
-      - dolinting:
-          requires: [build]
-      - build-dockerimage:
-           requires: [dolinting]
-      - update-deployment:
-          cluster-name: visheshcapstone
-          requires: [check-cluster-exists]
       
