@@ -72,8 +72,24 @@ jobs:
           name: publish docker image
           command: |
             echo $DockerPassword | docker login --username visheshvashista --password-stdin
-            ./upload_docker.sh  
-      
+            ./upload_docker.sh 
+  
+  check-cluster-exists: 
+    executor: aws-eks/python3
+    steps:
+      - checkout
+      - run:
+          command: |
+            isclustercreated=$(aws eks  list-clusters --output text | grep -c visheshCapstone)
+            echo "isClustered = $isclustercreated"
+          
+            if [ $isclustercreated -eq 1 ]
+            then
+               echo "cluster already exists"
+            else
+              eksctl create cluster --name visheshCapstone --version 1.17 --nodegroup-name nworkercap --node-type t2.micro --nodes 2 --nodes-min 1 --nodes-max 3 --node-ami auto --region us-west-2
+            fi
+
   update-deployment:
     executor: aws-eks/python3
     parameters:
@@ -122,17 +138,9 @@ workflows:
           requires: [build]
       - build-dockerimage:
            requires: [dolinting]
-      - aws-eks/create-cluster:
-          cluster-name: my-eks-demo
-      - test-cluster:
-          cluster-name: my-eks-demo
-          requires:
-            - aws-eks/create-cluster
-      - aws-eks/delete-cluster:
-          cluster-name: my-eks-demo
-          requires:
-            - test-cluster
+      - check-cluster-exists: 
+           requires: [build-dockerimage]
       - update-deployment:
           cluster-name: visheshcapstone
-          requires: [build-dockerimage]
+          requires: [check-cluster-exists]
       
