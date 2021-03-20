@@ -90,7 +90,7 @@ jobs:
             kubectl version --short --client
             stackarn=`aws cloudformation describe-stacks --stack-name "eksctl-visheshcapstone-cluster" --query "Stacks[*].StackId" --output text`
             aws eks --region us-west-2 update-kubeconfig --name visheshcapstone
-            kubectl config use-context $stackarn:cluster/visheshcapstone
+            kubectl config use-context arn:aws:eks:us-west-2:156584921282:cluster/visheshcapstone
             kubectl set image deployments/visheshCapstone visheshcapstone=visheshvashista/visheshcapstone:latest
             kubectl apply -f deployment.yml
             kubectl get nodes
