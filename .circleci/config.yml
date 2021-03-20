@@ -100,7 +100,7 @@ jobs:
             then
                echo "cluster already exists"
             else
-              eksctl create cluster --name visheshCapstone --version 1.17 --nodegroup-name nworkercap --node-type t2.micro --nodes 2 --nodes-min 1 --nodes-max 3 --node-ami auto --region us-west-2
+               echo "cluster does not exist"
             fi
 
   update-deployment:
