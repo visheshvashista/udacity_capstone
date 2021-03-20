@@ -88,10 +88,6 @@ jobs:
             chmod +x ./kubectl
             mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
             kubectl version --short --client
-
-      - run:
-          name: deploy to eks cluster 
-          command: |
             stackarn=`aws cloudformation describe-stacks --stack-name "eksctl-visheshcapstone-cluster" --query "Stacks[*].StackId" --output text`
             aws eks --region us-west-2 update-kubeconfig --name visheshcapstone
             kubectl config use-context $stackarn:cluster/visheshCapstone
