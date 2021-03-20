@@ -86,7 +86,6 @@ jobs:
             unzip awscliv2.zip
             sudo ./aws/install
             sudo apt-get update
-            sudo aws-
             sudo aws eks  list-clusters --output text | grep -c visheshCapstone
             
       - run:
