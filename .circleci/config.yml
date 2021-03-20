@@ -76,20 +76,13 @@ jobs:
   
   check-cluster-exists: 
     docker: 
-    - image: circleci/python:3.7.8-stretch
+    - image: amazon/aws-cli
     steps:
       - checkout
       - run:
           command: |
-            sudo apt-get install -y -qq groff
-            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-            unzip awscliv2.zip
-            sudo ./aws/install
-            sudo apt-get update
-      - run:
-          command: |
-            sudo aws  help
-            sudo aws eks  list-clusters --output text | grep -c visheshCapstone
+            aws  help
+            aws eks  list-clusters --output text | grep -c visheshCapstone
             
       - run:
           command: |    
