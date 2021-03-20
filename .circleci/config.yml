@@ -146,17 +146,5 @@ jobs:
 workflows:
   default:
     jobs:
-      - build
-      - dolinting:
-          requires: [build]
-      - build-dockerimage:
-           requires: [dolinting]
-      - create-cluster:
-           requires: [build-dockerimage]
-      - test-cluster:
-          cluster-name: visheshcapstone
-          requires: [create-cluster]
       - aws-eks/delete-cluster:
           cluster-name: visheshcapstone
-          requires:
-            - test-cluster
