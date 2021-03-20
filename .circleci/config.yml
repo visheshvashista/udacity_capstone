@@ -86,7 +86,7 @@ jobs:
             
             export eksclusterlist=$(aws eks  list-clusters --output text)
 
-            isClusterPresent=`echo "1"`
+            isClusterPresent=`echo $eksclisterlist`
 
             echo $isClusterPresent
 
