@@ -102,7 +102,6 @@ jobs:
       - run:
           name: aws commands work 
           command: |
-            TERM=ansi
             aws ec2 describe-instances  --output text
 
   update-deployment:
