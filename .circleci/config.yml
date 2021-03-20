@@ -86,7 +86,10 @@ jobs:
             
             export eksclusterlist=$(aws eks  list-clusters --output text)
 
-            echo $eksclusterlist
+            isClusterPresent=`echo $eksclusterlist | grep -c visheshcapstone`
+
+            echo $isClusterPresent
+
             
   update-deployment:
     executor: aws-eks/python3
