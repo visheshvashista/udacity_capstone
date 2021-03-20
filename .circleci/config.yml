@@ -24,34 +24,13 @@ jobs:
             make install
             sudo wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
             sudo chmod +x /bin/hadolint
-      
-      - save_cache:
-          paths:
-            - /home/circleci/project/venv
-          key: capstone  
-
-  dolinting:
-    docker:
-    - image: circleci/python:3.7.8-stretch
-    steps:
-      - checkout
-      - restore_cache:
-          keys: [capstone]
 
       - run:
           name: run lint
           command: |
             . /home/circleci/project/venv/bin/activate
             make lint 
-               
-     
-  build-dockerimage:
-    docker:
-    - image: circleci/python:3.7.8-stretch
-    steps:
-      - checkout
-      - restore_cache:
-          keys: [capstone]
+                    
       - setup_remote_docker:
           version: 19.03.13  
 
@@ -104,7 +83,3 @@ workflows:
   default:
     jobs:
       - build
-      - dolinting:
-          requires: [build]
-      - build-dockerimage:
-           requires: [dolinting]         
