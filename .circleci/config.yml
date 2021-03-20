@@ -67,8 +67,14 @@ jobs:
           command: |
             echo $DockerPassword | docker login --username visheshvashista --password-stdin
             ./upload_docker.sh  
+      
+      - run:
+          name: "Start Service and Check That it’s Running"
+          command: |
+            docker run -d --name app app
+            docker exec app curl --retry 10 --retry-connrefused http://localhost:8080
        
-  update-deployment:
+update-deployment:
     executor: aws-eks/python3
     parameters:
       cluster-name:
