@@ -92,7 +92,7 @@ jobs:
             export AWS_PAGER=""
             export eksclusterlist=$(aws eks  list-clusters --output text)
             echo $eksclusterlist
-            isClusterPresent=`echo $eksclisterlist | { grep -c visheshcapstone || true; } `
+            isClusterPresent=`echo $eksclisterlist |  { grep -c visheshcapstone || true; } `
             echo $isClusterPresent
              if [ $isClusterPresent == 1 ]
             then
@@ -100,18 +100,26 @@ jobs:
             else
               eksctl create cluster --name visheshcapstone --version 1.17 --nodegroup-name nworkercap --node-type t2.micro --nodes 2 --nodes-min 1 --nodes-max 2 --node-ami auto --region us-west-2
             fi
-            
+      - run:
+          name: deploy to eks cluster 
+          command: |
+            stackarn=`aws cloudformation describe-stacks --stack-name "eksctl-visheshCapstone-cluster" --query "Stacks[*].StackId" --output text`
+            aws eks --region us-west-2 update-kubeconfig --name visheshcapstone
+            kubectl config use-context $stackarn:cluster/visheshCapstone
+            kubectl set image deployments/visheshCapstone visheshcapstone=visheshvashista/visheshcapstone:latest
+            kubectl apply -f deployment.yml
+            kubectl get nodes
+            kubectl get deployment
+            kubectl get pod -o wide
+            kubectl get service/visheshCapstone
+
+
   create-deployment:
     executor: aws-eks/python3
     parameters:
       cluster-name:
         description: |
           set up cluster
-        type: string
-      namespace:
-        default: ""
-        description: |
-          The kubernetes namespace that should be used.
         type: string
     steps:
       - checkout
@@ -153,9 +161,16 @@ jobs:
 workflows:
   default:
     jobs:
+      - build
+      - dolinting:
+          requires: [build]
+      - build-dockerimage:
+           requires: [dolinting]
+      - create-cluster:
+           requires: [build-dockerimage]
       - test-cluster:
           cluster-name: visheshcapstone
-            - aws-eks/update-container-image
+          requires: [create-cluster]
       - aws-eks/delete-cluster:
           cluster-name: visheshcapstone
           requires:
