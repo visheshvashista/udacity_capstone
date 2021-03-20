@@ -80,6 +80,10 @@ jobs:
       - checkout
       - run:
           command: |
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+
             isclustercreated=$(aws eks  list-clusters --output text | grep -c visheshCapstone)
             echo "isClustered = $isclustercreated"
           
