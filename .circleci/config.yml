@@ -153,33 +153,10 @@ jobs:
 workflows:
   default:
     jobs:
-      - build
-      - dolinting:
-          requires: [build]
-      - build-dockerimage:
-           requires: [dolinting]
-      - create-deployment:
-          cluster-name: visheshcapstone
-          requires: [build-dockerimage]
-      - aws-eks/update-container-image:
-          cluster-name: visheshcapstone
-          namespace: visheshcapstone
-          container-image-updates: 'visheshcapstone=visheshvashista/visheshcapstone'
-          post-steps:
-            - kubernetes/delete-resource:
-                resource-names: visheshcapstone
-                resource-types: deployment
-                wait: true
-          record: true
-          requires:
-            - create-deployment
-          resource-name: deployment/visheshcapstone
       - test-cluster:
-          cluster-name: my-eks-demo
-          requires:
+          cluster-name: visheshcapstone
             - aws-eks/update-container-image
       - aws-eks/delete-cluster:
           cluster-name: visheshcapstone
           requires:
             - test-cluster
-      
