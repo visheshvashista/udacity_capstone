@@ -92,7 +92,8 @@ jobs:
             
       - run:
           command: |  
-            sudo aws eks  list-clusters --output text | grep -c visheshCapstone 
+            sudo aws eks  list-clusters --output text | grep -c visheshcapstone 
+
              
   deploy-infrastructure:
     docker:
@@ -103,7 +104,7 @@ jobs:
           name: aws commands work 
           command: |
             export AWS_PAGER=""
-            aws ec2 describe-instances  --output text
+            sudo aws eks  list-clusters --output text
 
   update-deployment:
     executor: aws-eks/python3
