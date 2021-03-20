@@ -103,7 +103,7 @@ jobs:
           name: aws commands work 
           command: |
             TERM=ansi
-            aws help
+            aws eks  list-clusters --output text
 
   update-deployment:
     executor: aws-eks/python3
