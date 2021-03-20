@@ -83,7 +83,7 @@ jobs:
             isclustercreated=$(aws eks  list-clusters --output text | grep -c visheshCapstone)
             echo "isClustered = $isclustercreated"
           
-            if [ $isclustercreated -eq 1 ]
+            if [ $isclustercreated == 1 ]
             then
                echo "cluster already exists"
             else
