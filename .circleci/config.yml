@@ -91,12 +91,12 @@ jobs:
             stackarn=`aws cloudformation describe-stacks --stack-name "eksctl-visheshcapstone-cluster" --query "Stacks[*].StackId" --output text`
             aws eks --region us-west-2 update-kubeconfig --name visheshcapstone
             kubectl config use-context arn:aws:eks:us-west-2:156584921282:cluster/visheshcapstone
-            kubectl set image deployments/visheshCapstone visheshcapstone=visheshvashista/visheshcapstone:latest
+            kubectl set image deployments/visheshcapstone visheshcapstone=visheshvashista/visheshcapstone:latest
             kubectl apply -f deployment.yml
             kubectl get nodes
             kubectl get deployment
             kubectl get pod -o wide
-            kubectl get service/visheshCapstone
+            kubectl get service/visheshcapstone
 
 
   create-deployment:
