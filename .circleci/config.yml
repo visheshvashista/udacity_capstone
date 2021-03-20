@@ -28,6 +28,7 @@ jobs:
       - run:
           name: run lint
           command: |
+           . venv/bin/activate
             make lint 
                     
       - setup_remote_docker:
