@@ -84,7 +84,7 @@ jobs:
           command: |
             export AWS_PAGER=""
             
-            aws eks  list-clusters --output text | grep -c visheshCapstone
+            aws eks  list-clusters --output text 
             
   update-deployment:
     executor: aws-eks/python3
