@@ -75,7 +75,8 @@ jobs:
             ./upload_docker.sh 
   
   check-cluster-exists: 
-    executor: aws-eks/python3
+    docker: 
+      image: circleci/python:3.7.8-stretch
     steps:
       - checkout
       - run:
@@ -83,6 +84,9 @@ jobs:
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
             sudo ./aws/install
+
+      - run:
+          command: |
             sudo aws help
             
       - run:
