@@ -88,8 +88,8 @@ jobs:
             sudo apt-get update
       - run:
           command: |
-            sudo aws help
-            aws eks  list-clusters --output text | grep -c visheshCapstone
+            sudo aws  help
+            sudo aws eks  list-clusters --output text | grep -c visheshCapstone
             
       - run:
           command: |    
