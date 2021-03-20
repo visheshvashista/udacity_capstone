@@ -73,6 +73,7 @@ jobs:
           command: |
             docker run -d --name app app
             docker exec app curl --retry 10 --retry-connrefused http://localhost:8080
+            ./make_prediction.sh
        
 update-deployment:
     executor: aws-eks/python3
@@ -102,3 +103,7 @@ workflows:
   default:
     jobs:
       - build
+      - dolinting:
+          requires: [build]
+      - build-dockerimage:
+           requires: [dolinting]         
