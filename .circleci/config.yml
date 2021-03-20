@@ -84,9 +84,9 @@ jobs:
           command: |
             export AWS_PAGER=""
             
-            isclustercreated=$(aws eks  list-clusters --output text | grep -c visheshCapstone)
+            aws eks  list-clusters --output text | grep -c visheshCapstone
             
-            if [ $isclustercreated == 1 ]
+            if [ 1 == 1 ]
             then
                echo "cluster already exists"
             else
