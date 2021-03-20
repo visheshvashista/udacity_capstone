@@ -86,9 +86,9 @@ jobs:
             
             export eksclusterlist=$(aws eks  list-clusters --output text)
 
-            isClusterPresent=`echo $eksclisterlist`
+            isClusterPresent=`echo $eksclisterlist | { grep -c visheshcapstone || true; } `
 
-            echo $isClusterPresent
+            echo "vishesh$isClusterPresent"
 
             
   update-deployment:
