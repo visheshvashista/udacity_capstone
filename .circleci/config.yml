@@ -93,6 +93,7 @@ jobs:
             export eksclusterlist=$(aws eks  list-clusters --output text)
             echo $eksclusterlist
             isClusterPresent=`echo $eksclisterlist | { grep -c visheshcapstone || true; } `
+            echo $isClusterPresent
              if [ $isClusterPresent == 1 ]
             then
                echo "cluster already exists"
