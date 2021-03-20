@@ -102,6 +102,7 @@ jobs:
       - run:
           name: aws commands work 
           command: |
+            export AWS_PAGER=""
             aws ec2 describe-instances  --output text
 
   update-deployment:
