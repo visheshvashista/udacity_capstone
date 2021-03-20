@@ -108,6 +108,11 @@ jobs:
         description: |
           set up cluster
         type: string
+      namespace:
+        default: ""
+        description: |
+          The kubernetes namespace that should be used.
+        type: string
     steps:
       - checkout
       - aws-eks/update-kubeconfig-with-authenticator:
@@ -158,6 +163,7 @@ workflows:
           requires: [build-dockerimage]
       - aws-eks/update-container-image:
           cluster-name: visheshcapstone
+          namespace: visheshcapstone
           container-image-updates: 'visheshcapstone=visheshvashista/visheshcapstone'
           post-steps:
             - kubernetes/delete-resource:
