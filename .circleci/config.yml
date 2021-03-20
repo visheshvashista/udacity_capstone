@@ -81,8 +81,7 @@ jobs:
       - checkout
       - run:
           command: |
-            aws  help
-            aws eks  list-clusters --output text | grep -c visheshCapstone
+            aws eks  list-clusters --output text
             
       - run:
           command: |    
@@ -140,13 +139,12 @@ jobs:
 workflows:
   default:
     jobs:
+      - check-cluster-exists
       - build
       - dolinting:
           requires: [build]
       - build-dockerimage:
            requires: [dolinting]
-      - check-cluster-exists: 
-           requires: [build-dockerimage]
       - update-deployment:
           cluster-name: visheshcapstone
           requires: [check-cluster-exists]
