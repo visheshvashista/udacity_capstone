@@ -83,7 +83,6 @@ jobs:
       - run:
           name: aws commands work 
           command: |
-            sudo apt-get update
             curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
             mv /tmp/eksctl /usr/local/bin
             export AWS_PAGER=""
