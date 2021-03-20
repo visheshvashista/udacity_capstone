@@ -84,7 +84,7 @@ jobs:
           command: |
             export AWS_PAGER=""
             
-            export eksclusterlist = $(aws eks  list-clusters --output text)
+            export eksclusterlist=$(aws eks  list-clusters --output text)
 
             echo $eksclusterlist
             
