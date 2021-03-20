@@ -153,11 +153,9 @@ workflows:
           requires: [build]
       - build-dockerimage:
            requires: [dolinting]
-      - create-cluster:
-           requires: [build-dockerimage]
       - create-deployment:
           cluster-name: visheshcapstone
-          requires: [create-cluster]
+          requires: [build-dockerimage]
       - aws-eks/update-container-image:
           cluster-name: visheshcapstone
           container-image-updates: 'visheshcapstone=visheshvashista/visheshcapstone'
