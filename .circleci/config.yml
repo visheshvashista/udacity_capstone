@@ -113,7 +113,7 @@ jobs:
           install-kubectl: true
       - kubernetes/create-or-update-resource:
           get-rollout-status: true
-          resource-file-path: deployment.yml
+          resource-file-path: deployments.yml
           resource-name: deployment/visheshcapstone
       - run:
           name: update image
