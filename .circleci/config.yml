@@ -74,7 +74,7 @@ jobs:
             echo $DockerPassword | docker login --username visheshvashista --password-stdin
             ./upload_docker.sh  
       
-update-deployment:
+  update-deployment:
     executor: aws-eks/python3
     parameters:
       cluster-name:
@@ -84,7 +84,7 @@ update-deployment:
     steps:
       - checkout
       - aws-eks/update-kubeconfig-with-authenticator:
-          cluster-name: visheshcapstone
+          cluster-name: << parameters.cluster-name >>
           install-kubectl: true
       - kubernetes/create-or-update-resource:
           get-rollout-status: true
@@ -105,4 +105,8 @@ workflows:
       - dolinting:
           requires: [build]
       - build-dockerimage:
-           requires: [dolinting] 
+           requires: [dolinting]
+      - update-deployment:
+           cluster-name: visheshcapstone-EKSCLUSTER
+           requires: [build-dockerimage]
+      
