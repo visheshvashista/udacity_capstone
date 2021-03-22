@@ -13,4 +13,4 @@ This project uses rolling update starategy and uses circleci orchestration tool.
 https://app.circleci.com/pipelines/github/visheshvashista/udacity_capstone/224/workflows/3f9aaea8-7130-4e5a-8dcf-e8ecc2870cda
 
 # markdown status 
-[![CircleCI](https://circleci.com/gh/visheshvashista/udacity_capstone.svg?style=svg&circle-token=3f9aaea871304e5a8dcfe8ecc2870cda)](https://circleci.com/gh/visheshvashista/udacity_capstone.svg?style=svg&circle-token=3f9aaea871304e5a8dcfe8ecc2870cda)
+[![CircleCI](https://circleci.com/gh/visheshvashista/udacity_capstone.svg?style=svg&circle-token=3f9aaea8-7130-4e5a-8dcf-e8ecc2870cda)](https://circleci.com/gh/visheshvashista/udacity_capstone.svg?style=svg&circle-token=3f9aaea8-7130-4e5a-8dcf-e8ecc2870cda)
