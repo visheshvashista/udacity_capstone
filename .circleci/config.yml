@@ -115,34 +115,5 @@ jobs:
 workflows:
   default:
     jobs:
-      - build
-      - lint:
-          requires: [build]
-      - build-dockerimage:
-           requires: [lint]
-      - aws-eks/create-cluster:
-          cluster-name: visheshcapstone1
-      - create-deployment:
-          cluster-name: visheshcapstone1
-          requires:
-            - aws-eks/create-cluster
-      - aws-eks/update-container-image:
-          cluster-name: visheshcapstone1
-          container-image-updates: 'visheshcapstone=visheshvashista/visheshcapstone'
-          post-steps:
-            - kubernetes/delete-resource:
-                resource-names: visheshcapstone
-                resource-types: deployment
-                wait: true
-          record: true
-          requires:
-            - create-deployment
-          resource-name: deployment/visheshcapstone
-      - test-cluster:
-          cluster-name: visheshcapstone1
-          requires:
-            - aws-eks/update-container-image
       - aws-eks/delete-cluster:
           cluster-name: visheshcapstone1
-          requires:
-            - test-cluster
