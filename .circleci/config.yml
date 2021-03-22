@@ -89,7 +89,7 @@ jobs:
           install-kubectl: true
       - kubernetes/create-or-update-resource:
           get-rollout-status: true
-          resource-file-path: deployment.yaml
+          resource-file-path: deployment.yml
           resource-name: deployment/visheshcapstone
 
   test-cluster:
@@ -120,12 +120,10 @@ workflows:
           requires: [build]
       - build-dockerimage:
            requires: [test-app] 
-      - aws-eks/create-cluster:
-          cluster-name: visheshcapstone1
       - create-deployment:
           cluster-name: visheshcapstone1
           requires:
-            - aws-eks/create-cluster
+            - build-dockerimage
       - aws-eks/update-container-image:
           cluster-name: visheshcapstone1
           container-image-updates: 'visheshcapstone=visheshvashista/visheshcapstone'
