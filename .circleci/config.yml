@@ -121,13 +121,13 @@ workflows:
       - build-dockerimage:
            requires: [test-app] 
       - aws-eks/create-cluster:
-          cluster-name: visheshcapstone
+          cluster-name: visheshcapstone1
       - create-deployment:
-          cluster-name: visheshcapstone
+          cluster-name: visheshcapstone1
           requires:
             - aws-eks/create-cluster
       - aws-eks/update-container-image:
-          cluster-name: visheshcapstone
+          cluster-name: visheshcapstone1
           container-image-updates: 'visheshcapstone=visheshvashista/visheshcapstone'
           post-steps:
             - kubernetes/delete-resource:
@@ -139,10 +139,10 @@ workflows:
             - create-deployment
           resource-name: deployment/visheshcapstone
       - test-cluster:
-          cluster-name: my-eks-demo
+          cluster-name: visheshcapstone1
           requires:
             - aws-eks/update-container-image
       - aws-eks/delete-cluster:
-          cluster-name: visheshcapstone
+          cluster-name: visheshcapstone1
           requires:
             - test-cluster
