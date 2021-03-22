@@ -100,7 +100,7 @@ jobs:
               eksctl create cluster --name visheshcapstone --version 1.17 --nodegroup-name nworkercap --node-type t2.micro --nodes 2 --nodes-min 1 --nodes-max 2 --node-ami auto --region us-west-2
             fi
 
-  deploytocluster:
+  deployapp-to-cluster:
     executor: aws-eks/python3
     parameters:
       cluster-name:
@@ -154,11 +154,11 @@ workflows:
            requires: [test-app]
       - create-cluster:
           requires: [build-dockerimage]
-      - deploy-to-cluster:
+      - deployapp-to-cluster:
           requires: [create-cluster]
       - test-cluster:
           cluster-name: visheshcapstone
-          requires: [deploy-to-cluster]
+          requires: [deployapp-to-cluster]
       - aws-eks/delete-cluster:
           cluster-name: visheshcapstone
           requires:
