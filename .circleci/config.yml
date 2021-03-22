@@ -90,9 +90,10 @@ jobs:
             mv /tmp/eksctl /usr/local/bin
             export AWS_PAGER=""
             export eksclusterlist=$(aws eks  list-clusters --output text)
-            eksclusterlist=`echo $eksclusterlist | sed '/^$/d' | grep -w visheshcapstone`
+            echo "vishesh"$eksclusterlist"Vashista"
+            eksclusterlist=`echo $eksclusterlist | sed '/^$/d' | grep -w visheshcapstone || true`
             echo eksclusterlist
-            isClusterPresent=`echo $eksclisterlist | { grep -c visheshcapstone || true; } `
+            isClusterPresent=`echo $eksclisterlist |  grep -c visheshcapstone || true`
             echo $isClusterPresent
              if [ $isClusterPresent == 1 ]
             then
