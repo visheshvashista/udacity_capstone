@@ -90,18 +90,13 @@ jobs:
             mv /tmp/eksctl /usr/local/bin
             export AWS_PAGER=""
             export eksclusterlist=$(aws eks  list-clusters --output text)
-            echo "vishesh"$eksclusterlist"Vashista"
             eksclusterlist=`echo $eksclusterlist | sed '/^$/d' | grep -w visheshcapstone || true`
-            echo eksclusterlist
             isClusterPresent=`echo $eksclisterlist |  grep -c visheshcapstone || true`
-            echo $isClusterPresent
-             if [ $isClusterPresent == 1 ]
+            if [ $isClusterPresent == 1 ]
             then
                echo "cluster already exists"
             else
-               echo "cluster does not exists"
-               echo $isClusterPresent
-               exit 0
+               echo "cluster does not exists.. creating cluster.. please wait"
               eksctl create cluster --name visheshcapstone --version 1.17 --nodegroup-name nworkercap --node-type t2.micro --nodes 2 --nodes-min 1 --nodes-max 2 --node-ami auto --region us-west-2
             fi
 
@@ -152,4 +147,19 @@ jobs:
 workflows:
   default:
     jobs:
-      - create-cluster
+      - build
+      - test-app:
+          requires: [build]
+      - build-dockerimage:
+           requires: [test-app]
+      - create-cluster:
+          requires: [build-dockerimage]
+      - deploy-to-cluster:
+          requires: [create-cluster]
+      - test-cluster:
+          cluster-name: visheshcapstone
+          requires: [deploy-to-cluster]
+      - aws-eks/delete-cluster:
+          cluster-name: visheshcapstone
+          requires:
+            - test-cluster
