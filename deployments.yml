@@ -1,10 +1,10 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: visheshcapstone
   labels:
     app: visheshcapstone
-  namespace: deployments
 spec:
   replicas: 3
   selector:
@@ -12,34 +12,45 @@ spec:
       app: visheshcapstone
   strategy:
     rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
+      maxSurge: 50%
+      maxUnavailable: 50%
     type: RollingUpdate
+  minReadySeconds: 60
+  progressDeadlineSeconds: 1800
   template:
     metadata:
       labels:
         app: visheshcapstone
     spec:
+      terminationGracePeriodSeconds: 30
       containers:
-        - image: visheshvashista/visheshcapstone
+        - name: visheshcapstone
+          image: visheshvashista/visheshcapstone
           imagePullPolicy: Always
           name: visheshcapstone
           ports:
             - containerPort: 80
+          livenessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /
+              scheme: HTTP
+              port: 8888
+            successThreshold: 1
+            periodSeconds: 30
+            failureThreshold: 3
+            timeoutSeconds: 10
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: visheshcapstone
-  labels:
-    app: visheshcapstone
+  name: "visheshcapstone-lb"
 spec:
   type: LoadBalancer
   selector:
     app: visheshcapstone
   ports:
-    - port: 80
-      targetPort: 80
-      nodePort: 30000
-      protocol: TCP
+    - protocol: TCP
+      port: 80
+      targetPort: 8888
