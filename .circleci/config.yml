@@ -29,7 +29,7 @@ jobs:
           paths:
             - ./venv
 
-  dolinting:
+  test-app:
     docker:
     - image: circleci/python:3.7.8-stretch
     working_directory: ~/repo
@@ -74,7 +74,6 @@ jobs:
           command: |
             echo $DockerPassword | docker login --username visheshvashista --password-stdin
             ./upload_docker.sh 
-
   create-cluster: 
     docker:
       - image: amazon/aws-cli
@@ -83,23 +82,29 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            yum install -y tar gzip
-            curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.19.6/2021-01-05/bin/linux/amd64/kubectl
-            chmod +x ./kubectl
-            mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
-            kubectl version --short --client
-            stackarn=`aws cloudformation describe-stacks --stack-name "eksctl-visheshcapstone-cluster" --query "Stacks[*].StackId" --output text`
-            aws eks --region us-west-2 update-kubeconfig --name visheshcapstone
-            kubectl config use-context arn:aws:eks:us-west-2:156584921282:cluster/visheshcapstone
-            kubectl set image deployments/visheshcapstone visheshcapstone=visheshvashista/visheshcapstone:latest
-            kubectl apply -f deployment.yml
-            kubectl get nodes
-            kubectl get deployment
-            kubectl get pod -o wide
-            kubectl get service/visheshcapstone
+            yum install -y tar gzip 
+      - run:
+          name: create visehshcapstone cluster if it doesn't exists
+          command: |
+            curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+            mv /tmp/eksctl /usr/local/bin
+            export AWS_PAGER=""
+            export eksclusterlist=$(aws eks  list-clusters --output text)
+            eksclusterlist=`echo $eksclusterlist | sed '/^$/d' | grep -w visheshcapstone`
+            echo eksclusterlist
+            isClusterPresent=`echo $eksclisterlist | { grep -c visheshcapstone || true; } `
+            echo $isClusterPresent
+             if [ $isClusterPresent == 1 ]
+            then
+               echo "cluster already exists"
+            else
+               echo "cluster does not exists"
+               echo $isClusterPresent
+               exit 0
+              eksctl create cluster --name visheshcapstone --version 1.17 --nodegroup-name nworkercap --node-type t2.micro --nodes 2 --nodes-min 1 --nodes-max 2 --node-ami auto --region us-west-2
+            fi
 
-
-  create-deployment:
+  deploytocluster:
     executor: aws-eks/python3
     parameters:
       cluster-name:
@@ -113,12 +118,12 @@ jobs:
           install-kubectl: true
       - kubernetes/create-or-update-resource:
           get-rollout-status: true
-          resource-file-path: deployments.yml
+          resource-file-path: deployment.yml
           resource-name: deployment/visheshcapstone
       - run:
           name: update image
           command: |
-            kubectl set image deployments/visheshcapstone visheshcapstone=visheshvashista/visheshcapstone:${CIRCLE_WORKFLOW_ID:0:7}
+            kubectl set image deployment/visheshcapstone visheshcapstone=visheshvashista/visheshcapstone
       - kubernetes/get-rollout-status:
           resource-name: deployment/visheshcapstone
           watch-rollout-status: true
@@ -146,5 +151,5 @@ jobs:
 workflows:
   default:
     jobs:
-      - aws-eks/delete-cluster:
-          cluster-name: visheshcapstone
+      - create-cluster:
+          requires: [build-dockerimage]
