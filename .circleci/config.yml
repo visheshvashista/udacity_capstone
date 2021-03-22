@@ -152,11 +152,9 @@ workflows:
           requires: [build]
       - build-dockerimage:
            requires: [test-app]
-      - create-cluster:
-          requires: [build-dockerimage]
       - deployapp-to-cluster:
           cluster-name: visheshcapstone
-          requires: [create-cluster]
+          requires: [build-dockerimage]
       - test-cluster:
           cluster-name: visheshcapstone
           requires: [deployapp-to-cluster]
