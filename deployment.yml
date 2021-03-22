@@ -35,11 +35,23 @@ spec:
             httpGet:
               path: /
               scheme: HTTP
-              port: 8888
+              port: 8080
             successThreshold: 1
+            initialDelaySeconds: 30
             periodSeconds: 30
             failureThreshold: 3
             timeoutSeconds: 10
+          readinessProbe:
+            failureThreshold: 5
+            initialDelaySeconds: 15
+            httpGet:
+              path: /
+              scheme: HTTP
+              port: 8080
+            successThreshold: 1
+            periodSeconds: 3
+            failureThreshold: 3
+            timeoutSeconds: 10            
 
 ---
 apiVersion: v1
@@ -52,5 +64,4 @@ spec:
     app: visheshcapstone
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: 8888
+      containerPort: 8080
