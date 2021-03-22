@@ -1,43 +1,16 @@
-# UdacityMicroservicesProject
-Udacity NanoDegree Project 4
-Screenshots for various steps have been added to screenshots directory
+# UdacityCapstoneProject
+Udacity Capstone Project
 
-# commands
-# set up virtual environment
-python3 -m venv ~/.UdacityMicroservicesProject
-source ~/.UdacityMicroservicesProject/bin/activate
+Screenshots for various steps have been added to capstone-screenshots directory
 
-# install dependencies
-cd UdacityMicroservicesProject
-make install
+# setup
+This project uses rolling update starategy and uses circleci orchestration tool. This project uses following two circleci orbs
+  
+  aws-eks: circleci/aws-eks@1.0.3
+  kubernetes: circleci/kubernetes@0.11.2
 
-# do linting
-make lint
-
-# create docker image 
-./run_docker.sh 
-
-# run predictions
-./make_predictions.sh
-
-# upload docker image to docker repository
-# login to docker
-# docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-./upload_docker.sh
-
-# deploy docker image  to kubernates
-# In ubantu image on windows 10 server
-# download minikube and kubectl and place run_kubernates.sh and make_runpredictions.sh
-sudo servcies docker start 
-minikube start
-./run_kubernetes.sh
-./make_predictions.sh
-
-# stop minikube
-minikube stop
-
-# successfuly circleci lint test
-https://app.circleci.com/pipelines/github/visheshvashista/UdacityMicroservicesProject/7/workflows/82882f03-d924-4893-8512-58c3c4565dbc
+# successfull capstone deployment
+https://app.circleci.com/pipelines/github/visheshvashista/udacity_capstone/224/workflows/3f9aaea8-7130-4e5a-8dcf-e8ecc2870cda
 
 # markdown status 
-[![CircleCI](https://circleci.com/gh/visheshvashista/UdacityMicroservicesProject.svg?style=svg&circle-token=33998a4727bca4c58f0acc3ee79293cd8ccc0a88)](https://circleci.com/gh/visheshvashista/UdacityMicroservicesProject.svg?style=svg&circle-token=33998a4727bca4c58f0acc3ee79293cd8ccc0a88)
+[![CircleCI](https://circleci.com/gh/visheshvashista/udacity_capstone.svg?style=svg&circle-token=3f9aaea871304e5a8dcfe8ecc2870cda)](https://circleci.com/gh/visheshvashista/udacity_capstone.svg?style=svg&circle-token=3f9aaea871304e5a8dcfe8ecc2870cda)
