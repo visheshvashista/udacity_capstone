@@ -64,4 +64,5 @@ spec:
     app: visheshcapstone
   ports:
     - protocol: TCP
-      containerPort: 8080
+      port: 80
+      targetPort: 8888
