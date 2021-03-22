@@ -151,5 +151,4 @@ jobs:
 workflows:
   default:
     jobs:
-      - create-cluster:
-          requires: [build-dockerimage]
+      - create-cluster
